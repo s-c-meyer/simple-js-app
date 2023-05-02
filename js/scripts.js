@@ -32,15 +32,15 @@ pokemonList[3] = {
     type: ['psychic', 'fairy']
 };
 
-let bigHeight = 5; //the height at which a pokemon is big 
+let bigHeight = 5; //the height at which a pokemon is considered big 
 
-for (i=0; i<pokemonList.length; i++) {
-    if (pokemonList[i].height <= bigHeight) { //if the pokemon is less than the bigHeight, do not print out that it is big
-        document.write (`<p> ${pokemonList[i].name} (height: ${pokemonList[i].height}) </p>`); 
+pokemonList.forEach(function(pokemon) {
+    if (pokemon.height <= bigHeight) { //if the pokemon is less than the bigHeight, do not print out that it is big
+        document.write (`<p> ${pokemon.name} (height: ${pokemon.height}) </p>`); 
     } else { //if the pokemon is greater than the bigHeight, then print that it is big 
-        document.write (`<p> ${pokemonList[i].name} (height: ${pokemonList[i].height}) - WOW, that's big! </p>`); 
+        document.write (`<p> ${pokemon.name} (height: ${pokemon.height}) - WOW, that's big! </p>`); 
     }
-}
+});
 
 
 
