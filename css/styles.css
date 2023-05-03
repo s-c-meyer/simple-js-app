@@ -1,0 +1,32 @@
+:root {
+    --light-font: 100;
+    --reg-font: 400;
+    --bold-font: 700;
+}
+
+body {
+    font-family: 'Comme', sans-serif;
+    font-weight: var(--reg-font);
+}
+
+.pokemon-list {
+    list-style: none;
+    padding: 0px; /*overriding the default padding on the ul */
+}
+
+.pokeButton {
+    margin: 5px;
+    font-family: inherit;
+    font-size: 20px;
+    border-radius: 3px;
+    border-bottom: 2px solid rgba(0,0,0,0.3); /*this gives the button a bottom border of 2px width*/
+    transition: 0.2s opacity;
+    width: 97%;
+    height: 40px;
+    text-align: left;
+}
+
+.pokeButton:hover, .pokeButton:focus {
+    cursor:pointer; /*this turns the cursor into a pointer when hovering over the button*/
+    opacity:0.8;
+}

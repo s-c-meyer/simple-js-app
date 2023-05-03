@@ -30,15 +30,6 @@ let pokemonRepository = (function () { //beginning of the IIFE
         type: ['psychic', 'fairy']
     };    
 
-    //commented out because the Object.keys part of the conditional is not functional
-    // function add(pokemon) { 
-    //     if (typeof(pokemon) === 'object' && Object.keys(pokemon) === ['name']) {
-    //         pokemonList.push(pokemon); //adds the object onto the end of the pokemonList array    
-    //     } else {
-    //         console.error('Please enter an object data type');
-    //     }
-    // }
-    
     //allows you to add a pokemon to the array, but only if it is an object data type
     function add(pokemon) { 
         if (typeof(pokemon) === 'object') {
@@ -53,28 +44,42 @@ let pokemonRepository = (function () { //beginning of the IIFE
         return pokemonList;
     }
 
+    //used to create all of the buttons on the screen for each pokemon in the pokemonList array, then also adds an event listener on each one. 
+    function addListItem(pokemon) {
+        let listedPokemon = document.querySelector('ul');
+        let listItem = document.createElement('li');
+        let pokeButton = document.createElement('button')
+        pokeButton.innerText = pokemon.name;
+        pokeButton.classList.add('pokeButton');
+        listItem.appendChild(pokeButton);
+        listedPokemon.appendChild(listItem);
+        addEventListener(pokeButton, pokemon);
+    }
+
+    //Used to add an event listener to a certain button, also calls the showDetails function to console log the pokemon name
+    function addEventListener (button, pokemon) {
+        button.addEventListener ('click', function() {
+            showDetails(pokemon); //you must use an anonymous function here to call showDetails, because if you passed a parameter in the Event Listener argument it will fire upon page load. 
+        });
+    }
+
+    //logs the name of the passed pokemon into the console
+    function showDetails(pokemon) {
+        console.log(pokemon.name);
+    }
+
     return {
         add: add,
-        getAll: getAll
+        getAll: getAll,
+        addListItem: addListItem
     };
 
 })(); // end of the IIFE
 
-let bigHeight = 5; //the height at which a pokemon is considered big 
-
 pokemonRepository.getAll().forEach(function(pokemon) {
-    if (pokemon.height <= bigHeight) { //if the pokemon is less than the bigHeight, do not print out that it is big
-        document.write (`<p> ${pokemon.name} (height: ${pokemon.height}) </p>`); 
-    } else { //if the pokemon is greater than the bigHeight, then print that it is big 
-        document.write (`<p> ${pokemon.name} (height: ${pokemon.height}) - WOW, that's big! </p>`); 
-    }
+    pokemonRepository.addListItem(pokemon);
 });
 
-pokemonRepository.add({name: 'Pikachu'});
-
-pokemonRepository.add('Raichu'); //testing functionality of the if-else statement for pokemonRepository.add()
-
-console.log(pokemonRepository.getAll());
 
 
 
