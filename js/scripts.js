@@ -1,34 +1,7 @@
 let pokemonRepository = (function () { //beginning of the IIFE
     
     let pokemonList = [];
-
-    pokemonList[0] = {
-        name : 'Swampert',
-        height: 1.5,
-        weight: 81.9,
-        type: ['water', 'ground']
-    };
-    
-    pokemonList[1] = {
-        name: 'Rayquaza',
-        height: 7,
-        weight: 206.5,
-        type: ['dragon', 'flying']
-    };
-    
-    pokemonList[2] = {
-        name: 'Ditto',
-        height: 0.3,
-        weight: 4,
-        type: ['normal']
-    };
-    
-    pokemonList[3] = {
-        name: 'Mr. Mime',
-        height: 1.3,
-        weight: 54.5,
-        type: ['psychic', 'fairy']
-    };    
+    let apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=150';
 
     //allows you to add a pokemon to the array, but only if it is an object data type
     function add(pokemon) { 
@@ -63,24 +36,125 @@ let pokemonRepository = (function () { //beginning of the IIFE
         });
     }
 
-    //logs the name of the passed pokemon into the console
+    //shows details loaded from the API about a specific pokemon
     function showDetails(pokemon) {
-        console.log(pokemon.name);
+        loadDetails(pokemon).then(function () {
+            showModal(pokemon.name, pokemon.height, pokemon.imageUrl);
+        });
     }
+
+    //this will fetch data from the API
+    function loadList() { 
+        return fetch(apiUrl).then(function (response) {
+            return response.json();
+        }).then(function (json) {
+            json.results.forEach(function (item) {
+                let pokemon = {
+                    name: item.name,
+                    detailsUrl: item.url
+                };
+                add(pokemon);
+            });
+        }).catch(function (e) {
+            console.error(e);
+        });
+    }
+
+    function loadDetails(item) {
+        let url= item.detailsUrl;
+        return fetch(url).then(function (response) {
+            return response.json();
+        }).then(function (details) {
+            //this is where details are added to the item
+            item.imageUrl = details.sprites.front_default;
+            item.height = details.height;
+            item.types = details.types;
+        }).catch(function (e) {
+            console.error(e);
+        });
+    }
+
+    function showLoadingMsg() {
+        console.log('THIS IS THE TIME TO ADD A LOADING MESSAGE');
+    }
+
+    function hideLoadingMsg() {
+        console.log('THIS IS THE TIME TO HIDE A LOADING MESSAGE');
+    }
+
+    function showModal(name, height, imageUrl) {
+        let modalContainer = document.querySelector('#modal-container');
+        
+        modalContainer.innerHTML = ''; //clear the content of the modal
+        
+        let modal = document.createElement('div');
+        modal.classList.add('modal');
+
+        let closeButtonElement = document.createElement('button');
+        closeButtonElement.classList.add('modal-close');
+        closeButtonElement.innerText = 'Close';
+        closeButtonElement.addEventListener('click', hideModal);
+
+        let nameElement = document.createElement('h1');
+        nameElement.innerText = name;
+
+        let imgContainer = document.createElement('div');
+        imgContainer.classList.add('pkmn-image');
+        
+        let imgElement = document.createElement('img');
+        imgElement.src = imageUrl;
+
+        let heightElement = document.createElement('p');
+        heightElement.innerText = 'Height: ';
+        heightElement.innerHTML += height;
+
+        modal.appendChild(closeButtonElement);
+        modal.appendChild(nameElement);
+        modal.appendChild(imgContainer);
+        imgContainer.appendChild(imgElement);
+        modal.appendChild(heightElement);
+        modalContainer.appendChild(modal);
+
+        modalContainer.classList.add('is-visible');
+
+        modalContainer.addEventListener('click', (e) => {
+            let target = e.target;
+            if (target === modalContainer) {
+                hideModal();
+            }
+        });
+    }
+
+    function hideModal() {
+        let modalContainer = document.querySelector('#modal-container');
+        modalContainer.classList.remove('is-visible');
+    }
+
+    //This allows the user to press the escape key to close the modal, ONLY if it is visible to begin with
+    window.addEventListener('keydown', (e) => {
+        let modalContainer = document.querySelector('#modal-container');
+        if (e.key = 'Escape' && modalContainer.classList.contains('is-visible')) {
+            hideModal();
+        }
+    })
 
     return {
         add: add,
         getAll: getAll,
-        addListItem: addListItem
+        addListItem: addListItem,
+        loadList: loadList,
+        loadDetails: loadDetails,
+        showDetails: showDetails,
+        showLoadingMsg: showLoadingMsg,
+        hideLoadingMsg: hideLoadingMsg,
     };
 
 })(); // end of the IIFE
 
-pokemonRepository.getAll().forEach(function(pokemon) {
-    pokemonRepository.addListItem(pokemon);
+
+//this ensures that the pokemon list is only rendered after (and if) all of the information has been received (fetched) from the server. 
+pokemonRepository.loadList().then(function() {
+    pokemonRepository.getAll().forEach(function (pokemon) {
+        pokemonRepository.addListItem(pokemon);
+    });
 });
-
-
-
-
-
