@@ -12,39 +12,23 @@
     </head>
     <body>
 
-        <header class="navbar">
+        <nav class="navbar">
             <h1 class="navbar-brand">Pokédex App</h1>
-        </header>
+        </nav>
 
         <div id="modal-container"></div>
-
-        <!-- Testing modal functionality on HTML page -->
-        <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">Test Button</button>
-
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">New Message</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <span>..... modal body elements</span>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- Setting up the modal for the pokemon app -->
         <div class="modal fade" id="pokemonModal" tabindex="-1" aria-labelledby="pokemonModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="pokemonModalLabel">Pokemon Modal Header</h1>
+                        <h1 class="modal-title fs-5" id="pokemonModalLabel"></h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        <span>..... pokemon body elements</span>
+                    <div class="modal-body"> 
+                      <img class="pokemon-img">
+                      <p class="pokemon-height"></p>
                     </div>
                 </div>
             </div>

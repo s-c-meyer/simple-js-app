@@ -17,18 +17,23 @@ let pokemonRepository = (function () { //beginning of the IIFE
         return pokemonList;
     }
 
-    //used to create all of the buttons on the screen for each pokemon in the pokemonList array, then also adds an event listener on each one. 
+    //used to create all of the buttons on the screen for each pokemon in the pokemonList array. 
     function addListItem(pokemon) {
         let listedPokemon = document.querySelector('ul');
         let listItem = document.createElement('li');
         listItem.classList.add('list-group-item');
         let pokeButton = document.createElement('button')
-        pokeButton.innerText = pokemon.name;
+        
+        // capitalize the first letter of the pokemon's name
+        let capPokemonName = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
+        
+    
+        pokeButton.innerText = capPokemonName;
         pokeButton.classList.add('pokeButton');
         pokeButton.classList.add('btn'); //make this button a Bootstrap button
         pokeButton.classList.add('btn-primary');
-        // pokeButton.setAttribute(data-bs-toggle, 'modal'); //this causes all of my buttons to not show up at all
-        // pokeButton.setAttribute(data-bs-target, '#pokemonModal'); //this also causes all of my buttons to not show up at all
+        pokeButton.setAttribute('data-bs-toggle', 'modal'); 
+        pokeButton.setAttribute('data-bs-target', '#pokemonModal'); 
         listItem.appendChild(pokeButton);
         listedPokemon.appendChild(listItem);
         addEventListener(pokeButton, pokemon);
@@ -44,8 +49,24 @@ let pokemonRepository = (function () { //beginning of the IIFE
     //shows details loaded from the API about a specific pokemon
     function showDetails(pokemon) {
         loadDetails(pokemon).then(function () {
-            showModal(pokemon.name, pokemon.height, pokemon.imageUrl);
+            showModal(pokemon);
         });
+    }
+
+    function showModal(pokemon) {
+      //Capitalizing pokemon's name for the modal
+      let capPokemonName = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
+      
+      //Adding content to the modal
+      let modalTitle = document.querySelector('.modal-title');
+      modalTitle.textContent = capPokemonName;
+
+      let pokemonImage = document.querySelector('.pokemon-img');
+      pokemonImage.src = pokemon.imageUrl;
+
+      let pokemonHeight = document.querySelector('.pokemon-height')
+      pokemonHeight.textContent = pokemon.height;
+
     }
 
     //this will fetch data from the API
@@ -79,70 +100,6 @@ let pokemonRepository = (function () { //beginning of the IIFE
         });
     }
 
-    // function showLoadingMsg() {
-    //     console.log('THIS IS THE TIME TO ADD A LOADING MESSAGE');
-    // }
-
-    // function hideLoadingMsg() {
-    //     console.log('THIS IS THE TIME TO HIDE A LOADING MESSAGE');
-    // }
-
-    function showModal(name, height, imageUrl) {
-        let modalContainer = document.querySelector('#modal-container');
-        
-        modalContainer.innerHTML = ''; //clear the content of the modal
-        
-        let modal = document.createElement('div');
-        modal.classList.add('modal');
-
-        let closeButtonElement = document.createElement('button');
-        closeButtonElement.classList.add('modal-close');
-        closeButtonElement.innerText = 'Close';
-        closeButtonElement.addEventListener('click', hideModal);
-
-        let nameElement = document.createElement('h1');
-        nameElement.innerText = name;
-
-        let imgContainer = document.createElement('div');
-        imgContainer.classList.add('pkmn-image');
-        
-        let imgElement = document.createElement('img');
-        imgElement.src = imageUrl;
-
-        let heightElement = document.createElement('p');
-        heightElement.innerText = 'Height: ';
-        heightElement.innerHTML += height;
-
-        modal.appendChild(closeButtonElement);
-        modal.appendChild(nameElement);
-        modal.appendChild(imgContainer);
-        imgContainer.appendChild(imgElement);
-        modal.appendChild(heightElement);
-        modalContainer.appendChild(modal);
-
-        modalContainer.classList.add('is-visible');
-
-        modalContainer.addEventListener('click', (e) => {
-            let target = e.target;
-            if (target === modalContainer) {
-                hideModal();
-            }
-        });
-    }
-
-    function hideModal() {
-        let modalContainer = document.querySelector('#modal-container');
-        modalContainer.classList.remove('is-visible');
-    }
-
-    //This allows the user to press the escape key to close the modal, ONLY if it is visible to begin with
-    window.addEventListener('keydown', (e) => {
-        let modalContainer = document.querySelector('#modal-container');
-        if (e.key = 'Escape' && modalContainer.classList.contains('is-visible')) {
-            hideModal();
-        }
-    })
-
     return {
         add: add,
         getAll: getAll,
@@ -150,12 +107,9 @@ let pokemonRepository = (function () { //beginning of the IIFE
         loadList: loadList,
         loadDetails: loadDetails,
         showDetails: showDetails,
-        // showLoadingMsg: showLoadingMsg,
-        // hideLoadingMsg: hideLoadingMsg,
     };
 
 })(); // end of the IIFE
-
 
 //this ensures that the pokemon list is only rendered after (and if) all of the information has been received (fetched) from the server. 
 pokemonRepository.loadList().then(function() { //fetches the data from the Pokemon API
