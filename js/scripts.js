@@ -21,9 +21,14 @@ let pokemonRepository = (function () { //beginning of the IIFE
     function addListItem(pokemon) {
         let listedPokemon = document.querySelector('ul');
         let listItem = document.createElement('li');
+        listItem.classList.add('list-group-item');
         let pokeButton = document.createElement('button')
         pokeButton.innerText = pokemon.name;
         pokeButton.classList.add('pokeButton');
+        pokeButton.classList.add('btn'); //make this button a Bootstrap button
+        pokeButton.classList.add('btn-primary');
+        // pokeButton.setAttribute(data-bs-toggle, 'modal'); //this causes all of my buttons to not show up at all
+        // pokeButton.setAttribute(data-bs-target, '#pokemonModal'); //this also causes all of my buttons to not show up at all
         listItem.appendChild(pokeButton);
         listedPokemon.appendChild(listItem);
         addEventListener(pokeButton, pokemon);
@@ -74,13 +79,13 @@ let pokemonRepository = (function () { //beginning of the IIFE
         });
     }
 
-    function showLoadingMsg() {
-        console.log('THIS IS THE TIME TO ADD A LOADING MESSAGE');
-    }
+    // function showLoadingMsg() {
+    //     console.log('THIS IS THE TIME TO ADD A LOADING MESSAGE');
+    // }
 
-    function hideLoadingMsg() {
-        console.log('THIS IS THE TIME TO HIDE A LOADING MESSAGE');
-    }
+    // function hideLoadingMsg() {
+    //     console.log('THIS IS THE TIME TO HIDE A LOADING MESSAGE');
+    // }
 
     function showModal(name, height, imageUrl) {
         let modalContainer = document.querySelector('#modal-container');
@@ -145,16 +150,16 @@ let pokemonRepository = (function () { //beginning of the IIFE
         loadList: loadList,
         loadDetails: loadDetails,
         showDetails: showDetails,
-        showLoadingMsg: showLoadingMsg,
-        hideLoadingMsg: hideLoadingMsg,
+        // showLoadingMsg: showLoadingMsg,
+        // hideLoadingMsg: hideLoadingMsg,
     };
 
 })(); // end of the IIFE
 
 
 //this ensures that the pokemon list is only rendered after (and if) all of the information has been received (fetched) from the server. 
-pokemonRepository.loadList().then(function() {
+pokemonRepository.loadList().then(function() { //fetches the data from the Pokemon API
     pokemonRepository.getAll().forEach(function (pokemon) {
-        pokemonRepository.addListItem(pokemon);
+        pokemonRepository.addListItem(pokemon); //creates all of the buttons for the pokemon on the screen
     });
 });
