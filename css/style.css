@@ -1,0 +1,21 @@
+body {
+  font-family: 'Carter One', cursive;
+}
+
+.pokeButton {
+  width: 150px;
+}
+
+.references {
+  margin-top: 50px;
+  font-family: sans-serif;
+  background-color: #f0f0f0;
+}
+
+.pokemon-img {
+  width: 150px;
+}
+
+.navbar {
+  background-color: #ee1515;
+}

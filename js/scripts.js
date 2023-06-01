@@ -34,6 +34,7 @@ let pokemonRepository = (function () { //beginning of the IIFE
         pokeButton.classList.add('btn-primary');
         pokeButton.setAttribute('data-bs-toggle', 'modal'); 
         pokeButton.setAttribute('data-bs-target', '#pokemonModal'); 
+        listItem.classList.add('border-0'); //remove the default borders from all list items
         listItem.appendChild(pokeButton);
         listedPokemon.appendChild(listItem);
         addEventListener(pokeButton, pokemon);
@@ -65,7 +66,7 @@ let pokemonRepository = (function () { //beginning of the IIFE
       pokemonImage.src = pokemon.imageUrl;
 
       let pokemonHeight = document.querySelector('.pokemon-height')
-      pokemonHeight.textContent = pokemon.height;
+      pokemonHeight.textContent = "Height: " + (pokemon.height / 10) + " m";
 
     }
 
